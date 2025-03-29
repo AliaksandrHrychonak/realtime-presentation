@@ -5,7 +5,6 @@ import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useSessionStore } from '@entities/session';
-import { wait } from '@shared/lib';
 
 import type { AuthByUsernameFormData } from './auth-by-username.schema';
 
@@ -23,7 +22,6 @@ export const useAuthByUsernameFormController = ({
     const handleSubmit = useCallback(
         async ({ username }: AuthByUsernameFormData) => {
             try {
-                await wait(100);
                 setViewer({ username, id: uuidv4() });
                 onComplete?.();
                 // TODO Texts should be in the config, need fix after review

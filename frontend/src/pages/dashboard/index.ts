@@ -1,2 +1,1 @@
-export { DashboardPage } from './ui';
-export { DashboardLayout } from './ui';
+export * from './ui';

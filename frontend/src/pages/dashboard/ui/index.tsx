@@ -1,3 +1,5 @@
+'use client';
+
 import { ViewerBar } from '@entities/session';
 import { Separator, Sidebar, SidebarFooter, SidebarInset, SidebarProvider, SidebarTrigger } from '@shared/ui';
 
