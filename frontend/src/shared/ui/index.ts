@@ -12,3 +12,6 @@ export * from './command';
 export * from './badge';
 export * from './card';
 export * from './skeleton';
+export * from './sidebar';
+export * from './separator';
+export * from './dropdown-menu';
