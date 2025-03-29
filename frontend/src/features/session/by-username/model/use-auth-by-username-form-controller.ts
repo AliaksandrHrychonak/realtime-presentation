@@ -1,5 +1,6 @@
 'use client';
 
+import { faker } from '@faker-js/faker';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,7 +23,7 @@ export const useAuthByUsernameFormController = ({
     const handleSubmit = useCallback(
         async ({ username }: AuthByUsernameFormData) => {
             try {
-                setViewer({ username, id: uuidv4() });
+                setViewer({ username, id: uuidv4(), avatar: faker.image.avatar() });
                 onComplete?.();
                 // TODO Texts should be in the config, need fix after review
                 toast.success('Auth by username successfully');
