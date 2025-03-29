@@ -1,23 +1,112 @@
 'use client';
 
+import {
+    BarChartIcon,
+    FolderIcon,
+    HelpCircleIcon,
+    LayoutDashboardIcon,
+    PresentationIcon,
+    SearchIcon,
+    SettingsIcon,
+    SquarePlusIcon,
+    UsersIcon,
+} from 'lucide-react';
+
+import { NavigationSecondary, NavigationMain } from '@entities/navigation';
+import { PresentationDashboardNavigation } from '@entities/presentation';
 import { ViewerBar } from '@entities/session';
-import { Separator, Sidebar, SidebarFooter, SidebarInset, SidebarProvider, SidebarTrigger } from '@shared/ui';
+import {
+    Separator,
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarInset,
+    SidebarProvider,
+    SidebarTrigger,
+} from '@shared/ui';
 
 import type { JSX, ReactNode } from 'react';
+
+const data = {
+    navMain: [
+        {
+            title: 'Dashboard',
+            url: '/dashboard',
+            icon: LayoutDashboardIcon,
+        },
+        {
+            title: 'Analytics',
+            url: '#',
+            icon: BarChartIcon,
+            disabled: true,
+        },
+        {
+            title: 'Projects',
+            url: '#',
+            icon: FolderIcon,
+            disabled: true,
+        },
+        {
+            title: 'Team',
+            url: '#',
+            icon: UsersIcon,
+            disabled: true,
+        },
+    ],
+    navSecondary: [
+        {
+            title: 'Settings',
+            url: '#',
+            icon: SettingsIcon,
+            disabled: true,
+        },
+        {
+            title: 'Get Help',
+            url: '#',
+            icon: HelpCircleIcon,
+            disabled: true,
+        },
+        {
+            title: 'Search',
+            url: '#',
+            icon: SearchIcon,
+            disabled: true,
+        },
+    ],
+    presentations: [
+        {
+            name: 'Presentations',
+            url: '/dashboard/presentations',
+            icon: PresentationIcon,
+        },
+        {
+            name: 'Create',
+            url: '/dashboard',
+            icon: SquarePlusIcon,
+        },
+    ],
+};
 
 export const DashboardLayout = ({ children }: { children: ReactNode }): JSX.Element => {
     return (
         <SidebarProvider>
             <Sidebar variant='inset'>
-                {/*<SidebarHeader></SidebarHeader>*/}
-                {/*<SidebarContent></SidebarContent>*/}
+                <SidebarHeader>
+                    <div className='flex items-center gap-2'>
+                        <div className='w-8 h-8 bg-accent-foreground rounded-lg flex items-center justify-center p-0.5'>
+                            <span className='text-white font-bold text-xl'>RP</span>
+                        </div>
+                        <span className='font-semibold text-l'>RealTime Presentation</span>
+                    </div>
+                </SidebarHeader>
+                <SidebarContent>
+                    <NavigationMain items={data.navMain} />
+                    <PresentationDashboardNavigation items={data.presentations} />
+                    <NavigationSecondary items={data.navSecondary} />
+                </SidebarContent>
                 <SidebarFooter>
-                    <ViewerBar
-                        viewer={{
-                            username: 'wq',
-                            id: '123-456-68686',
-                        }}
-                    />
+                    <ViewerBar />
                 </SidebarFooter>
             </Sidebar>
             <SidebarInset>
@@ -28,15 +117,6 @@ export const DashboardLayout = ({ children }: { children: ReactNode }): JSX.Elem
                     </div>
                 </header>
                 {children}
-                {/*<div className='flex flex-1 flex-col'>*/}
-                {/*    <div className='@container/main flex flex-1 flex-col gap-2'>*/}
-                {/*        <div className='flex flex-col gap-4 py-4 md:gap-6 md:py-6'>*/}
-                {/*            <div className='px-4 lg:px-6'>*/}
-                {/*                <PresentationList />*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
             </SidebarInset>
         </SidebarProvider>
     );
