@@ -1,7 +1,13 @@
 import { PresentationView } from '@widgets/presentation-view';
 
-import type { JSX } from 'react';
+import type { FC, JSX } from 'react';
 
-export const PresentationViewPage = (): JSX.Element => {
-    return <PresentationView />;
+interface PresentationPageProps {
+    params: {
+        id: string;
+    };
+}
+
+export const PresentationPage: FC<PresentationPageProps> = async ({ params }): Promise<JSX.Element> => {
+    return <PresentationView presentationId={params.id} />;
 };

@@ -1,71 +1,49 @@
 'use client';
 
-import { faker } from '@faker-js/faker';
+import { X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import type { JSX } from 'react';
+import { usePresentationQuery } from '@entities/presentation';
+import { AutoPlayPresentationButton, useAutoPlayPresentation } from '@features/presentation-view';
+import { Button, Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@shared/ui';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const generateMockPresentation = () => {
-    return {
-        id: faker.string.uuid(),
-        title: faker.company.catchPhrase(),
-        description: faker.lorem.sentence(),
-        createdAt: faker.date.recent().toISOString(),
-        createdBy: faker.person.fullName(),
-        participantsCount: faker.number.int({ min: 1, max: 20 }),
-        slides: Array.from({ length: faker.number.int({ min: 10, max: 20 }) }, () => ({
-            id: faker.string.uuid(),
-            content: faker.lorem.paragraph(),
-            order: faker.number.int({ min: 1, max: 10 }),
-        })),
-        participants: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () => ({
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            role: faker.helpers.arrayElement(['viewer', 'editor']),
-            joinedAt: faker.date.recent().toISOString(),
-        })),
-    };
-};
+import type { CarouselApi } from '@shared/ui';
+import type { FC, JSX } from 'react';
 
-const presentation = generateMockPresentation();
+interface IPresentationView {
+    presentationId: string;
+}
 
-export const PresentationView = (): JSX.Element => {
-    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-
-    const nextSlide = (): void => {
-        if (currentSlideIndex < presentation.slides.length - 1) {
-            setCurrentSlideIndex((prev) => prev + 1);
-        }
-    };
-
-    const prevSlide = (): void => {
-        if (currentSlideIndex > 0) {
-            setCurrentSlideIndex((prev) => prev - 1);
-        }
-    };
+export const PresentationView: FC<IPresentationView> = ({ presentationId }): JSX.Element => {
+    const { data } = usePresentationQuery(presentationId);
+    const [api, setApi] = useState<CarouselApi>();
+    const playback = useAutoPlayPresentation(api, 1500);
+    const router = useRouter();
 
     return (
-        <div className='presentation-viewer'>
-            <h1>{presentation.title}</h1>
+        <main className='relative w-screen h-screen p-8'>
+            <Button variant='ghost' size='icon' className='absolute top-4 right-4  z-10' onClick={() => router.back()}>
+                <X className='h-6 w-6' />
+            </Button>
 
-            <div className='slide-container'>
-                {presentation.slides[currentSlideIndex] && (
-                    <div className='slide'>{presentation.slides[currentSlideIndex].content}</div>
-                )}
-            </div>
+            <Carousel setApi={setApi} className='w-full h-full'>
+                <CarouselContent>
+                    {data?.slides.map((slide) => (
+                        <CarouselItem key={slide.id} className='flex items-center justify-center'>
+                            <div className='w-full h-full flex items-center justify-center'>{slide.content}</div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
 
-            <div className='navigation'>
-                <button onClick={prevSlide} disabled={currentSlideIndex === 0}>
-                    Предыдущий
-                </button>
-                <span>
-                    {currentSlideIndex + 1} / {presentation.slides.length}
-                </span>
-                <button onClick={nextSlide} disabled={currentSlideIndex === presentation.slides.length - 1}>
-                    Следующий
-                </button>
-            </div>
-        </div>
+                <div className='fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 py-3 rounded-full bg-accent backdrop-blur-sm px-[64px]'>
+                    <div className='relative'>
+                        <CarouselPrevious variant='ghost' />
+                        <AutoPlayPresentationButton playbackState={playback} />
+                        <CarouselNext variant='ghost' />
+                    </div>
+                </div>
+            </Carousel>
+        </main>
     );
 };
