@@ -1,41 +1,69 @@
 'use client';
 
-import { faker } from '@faker-js/faker';
+import { useWindowVirtualizer } from '@tanstack/react-virtual';
+import { useMemo } from 'react';
 import { toast } from 'sonner';
 
-import { PresentationPreviewCard } from '@entities/presentation';
+import { PresentationPreviewCard, useInfiniteQueryPresentation } from '@entities/presentation';
 
 import type { JSX } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const generateMockPresentations = (count: number) => {
-    return Array.from({ length: count }, () => ({
-        id: faker.string.uuid(),
-        title: faker.company.catchPhrase(),
-        description: faker.lorem.sentence(),
-        createdAt: faker.date.recent().toISOString(),
-        createdBy: faker.person.fullName(),
-        participantsCount: faker.number.int({ min: 1, max: 20 }),
-        slides: Array.from({ length: faker.number.int({ min: 3, max: 10 }) }, () => ({
-            id: faker.string.uuid(),
-            content: faker.lorem.paragraph(),
-            order: faker.number.int({ min: 1, max: 10 }),
-        })),
-        participants: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () => ({
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            role: faker.helpers.arrayElement(['viewer', 'editor']),
-            joinedAt: faker.date.recent().toISOString(),
-        })),
-    }));
-};
+const PRESENTATION_HEIGHT = 140;
 
 export const PresentationList = (): JSX.Element => {
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQueryPresentation();
+
+    const flatPresentations = useMemo(() => data?.pages.flatMap((page) => page.items) ?? [], [data]);
+
+    const rowCount = Math.ceil(flatPresentations.length / 4);
+
+    const virtualizer = useWindowVirtualizer({
+        count: rowCount,
+        estimateSize: () => PRESENTATION_HEIGHT,
+        overscan: 5,
+        onChange: (instance) => {
+            const virtualItems = instance.getVirtualItems();
+            const lastItem = virtualItems[virtualItems.length - 1];
+            if (lastItem && !isFetchingNextPage && hasNextPage && lastItem.index >= rowCount - 4) {
+                void fetchNextPage();
+            }
+        },
+        gap: 16,
+    });
+
     return (
-        <section className='flex flex-wrap gap-6 p-6'>
-            {generateMockPresentations(20).map(({ id, ...props }) => (
-                <PresentationPreviewCard key={id} {...props} onJoin={() => toast.info(`onJoin ${id}`)} />
-            ))}
+        <section className='w-full min-h-screen p-5'>
+            <div className='relative w-full' style={{ height: `${virtualizer.getTotalSize()}px` }}>
+                {virtualizer.getVirtualItems().map((virtualRow) => {
+                    const startIndex = virtualRow.index * 4;
+                    const rowPresentations = flatPresentations.slice(startIndex, startIndex + 4);
+
+                    return (
+                        <div
+                            key={virtualRow.index}
+                            className='absolute top-0 left-0 w-full flex flex-wrap gap-4'
+                            style={{
+                                transform: `translateY(${virtualRow.start}px)`,
+                                height: `${PRESENTATION_HEIGHT}px`,
+                            }}
+                        >
+                            {rowPresentations.map((presentation) => (
+                                <PresentationPreviewCard
+                                    key={presentation.id}
+                                    className='w-[calc(25%-12px)]'
+                                    data={presentation}
+                                    onJoin={() => toast.info(presentation.id)}
+                                />
+                            ))}
+                        </div>
+                    );
+                })}
+            </div>
+            {isFetchingNextPage && (
+                <div className='flex justify-center p-4'>
+                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900' />
+                </div>
+            )}
         </section>
     );
 };
