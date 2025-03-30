@@ -24,6 +24,7 @@ export default defineConfig([
         rules: {
             'fsd/insignificant-slice': 'warn',
             'fsd/no-segmentless-slices': 'warn',
+            'fsd/repetitive-naming': 'warn',
         },
     },
 ]);

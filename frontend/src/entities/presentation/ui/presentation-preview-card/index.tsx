@@ -7,7 +7,7 @@ import React from 'react';
 import { cn } from '@shared/lib';
 import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@shared/ui';
 
-import type { IPresentation } from '@shared/api/types/presentation';
+import type { IPresentation } from '@shared/api';
 import type { JSX, FC, ComponentProps } from 'react';
 
 interface PresentationPreviewCardProps extends ComponentProps<typeof Card> {
