@@ -1,25 +1,52 @@
-# Real time client presentation editor
+# Real-time Presentation Editor
 
-## Development Status
+## Current Status
 
-Currently in active development.
+In active development
 
-### Upcoming Features
+### Implemented Features
 
-- Responsive table design
-- Locales change all data
-- CSV export functionality
-- Gallery view alternative
-- Enhanced Faker dictionaries for more diverse data generation
-- TODO items resolution
-- MVC pattern compliance improvements
-- Zod validation for environment variables
-- Debounce implementation for user inputs
-- Auto-scroll reset on user interaction dependencies change
+- Nickname-based authentication
+- Interactive dashboard with navigation
+- Presentation viewing mode
+- Virtual presentation list with infinite scroll
+- Basic presentation profile
+
+### Development Plan
+
+#### Roles and Permissions System
+
+- Creator: full presentation control
+- Editor: slide management
+- Viewer: presentation viewing
+
+#### Real-time Synchronization
+
+- Instant updates via WebSocket
+- Live presentation list
+- Change history
+
+#### Slide Editor
+
+- Text blocks with Markdown support
+- Graphics elements management:
+    - Shapes and colors
+    - Images
+    - Scaling
+- Slide preview and navigation
+- Animations and transitions
+- PDF export
+
+#### Technical Improvements
+
+- Responsive design with scaling
+- MVC architecture optimization
+- Zod validation
+- User input optimization
 
 ## Live Demo
 
-Visit: [Your deployed app URL]
+Visit: [https://realtime-presentation.vercel.app]https://realtime-presentation.vercel.app/dashboard
 
 ## Getting Started
 
