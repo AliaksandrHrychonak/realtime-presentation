@@ -2,16 +2,28 @@
 
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import { useMemo } from 'react';
-import { toast } from 'sonner';
 
 import { PresentationPreviewCard, useInfiniteQueryPresentation } from '@entities/presentation';
+import { Skeleton } from '@shared/ui';
 
 import type { JSX } from 'react';
 
 const PRESENTATION_HEIGHT = 140;
 
+export const PresentationListSkeleton = ({ count = 4 }: { count?: number }): JSX.Element => {
+    return (
+        <div className='grid grid-cols-4 gap-4 p-5'>
+            {Array.from({ length: count }).map((_, index) => (
+                <div key={index} className='w-full'>
+                    <Skeleton className='w-full h-[140px] rounded-lg' />
+                </div>
+            ))}
+        </div>
+    );
+};
+
 export const PresentationList = (): JSX.Element => {
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQueryPresentation();
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQueryPresentation();
 
     const flatPresentations = useMemo(() => data?.pages.flatMap((page) => page.items) ?? [], [data]);
 
@@ -30,6 +42,10 @@ export const PresentationList = (): JSX.Element => {
         },
         gap: 16,
     });
+
+    if (isLoading) {
+        return <PresentationListSkeleton />;
+    }
 
     return (
         <section className='w-full min-h-screen p-5'>
@@ -52,18 +68,14 @@ export const PresentationList = (): JSX.Element => {
                                     key={presentation.id}
                                     className='w-[calc(25%-12px)]'
                                     data={presentation}
-                                    onJoin={() => toast.info(presentation.id)}
+                                    onJoin={() => undefined}
                                 />
                             ))}
                         </div>
                     );
                 })}
             </div>
-            {isFetchingNextPage && (
-                <div className='flex justify-center p-4'>
-                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900' />
-                </div>
-            )}
+            {isFetchingNextPage && <PresentationListSkeleton />}
         </section>
     );
 };

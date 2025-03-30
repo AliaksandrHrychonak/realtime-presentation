@@ -16,3 +16,5 @@ export * from './sidebar';
 export * from './separator';
 export * from './dropdown-menu';
 export * from './avatar';
+export * from './carousel';
+export * from './scroll-area';

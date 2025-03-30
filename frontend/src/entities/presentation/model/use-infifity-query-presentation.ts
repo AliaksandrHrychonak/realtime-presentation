@@ -11,7 +11,7 @@ export const useInfiniteQueryPresentation = () => {
         queryKey: ['presentations'],
         queryFn: async ({ pageParam = 0 }) => {
             await wait(1000);
-            const items = Array.from({ length: 30 }, () => generateMockPresentation());
+            const items = Array.from({ length: 32 }, () => generateMockPresentation());
             return {
                 items,
                 nextPage: pageParam + 1,

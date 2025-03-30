@@ -1,6 +1,7 @@
 'use client';
 
 import { Users } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react';
 
 import { cn } from '@shared/lib';
@@ -33,10 +34,10 @@ export const PresentationPreviewCard: FC<PresentationPreviewCardProps> = ({
             <CardFooter className='flex justify-between items-center p-2'>
                 <div className='flex items-center gap-2'>
                     <Users className='h-4 w-4' />
-                    <span className='text-sm text-muted-foreground'>12 joined</span>
+                    <span className='text-sm text-muted-foreground'>{data.participants.length} joined</span>
                 </div>
-                <Button onClick={onJoin} variant='secondary'>
-                    Join
+                <Button onClick={onJoin} variant='secondary' asChild>
+                    <Link href={`/dashboard/presentation/${data.id}`}>Join</Link>
                 </Button>
             </CardFooter>
         </Card>

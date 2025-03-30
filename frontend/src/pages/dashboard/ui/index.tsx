@@ -8,8 +8,8 @@ import {
     PresentationIcon,
     SearchIcon,
     SettingsIcon,
-    SquarePlusIcon,
     UsersIcon,
+    WrenchIcon,
 } from 'lucide-react';
 
 import { NavigationSecondary, NavigationMain } from '@entities/navigation';
@@ -76,14 +76,9 @@ const data = {
     ],
     presentations: [
         {
-            name: 'Presentations',
-            url: '/dashboard/presentations',
+            name: 'List',
+            url: '/dashboard/presentation/list',
             icon: PresentationIcon,
-        },
-        {
-            name: 'Create',
-            url: '/dashboard',
-            icon: SquarePlusIcon,
         },
     ],
 };
@@ -123,5 +118,9 @@ export const DashboardLayout = ({ children }: { children: ReactNode }): JSX.Elem
 };
 
 export const DashboardPage = (): JSX.Element => {
-    return <div>dashboard</div>;
+    return (
+        <div className='m-auto'>
+            <WrenchIcon className='h-12 w-12' />
+        </div>
+    );
 };
