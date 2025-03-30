@@ -88,4 +88,5 @@ The project follows Feature-Sliced Design (FSD) methodology:
 - `entities` - Business logic
 - `shared` - Reusable components and utils
 
-![2025-03-28_05-01-56](https://github.com/user-attachments/assets/7614625e-9efc-4eb6-8342-9f6bfe29cf84)
+![2025-03-30_20-13-49](https://github.com/user-attachments/assets/a181f776-297c-496a-8c70-60994b4f45fa)
+
