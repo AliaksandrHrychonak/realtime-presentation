@@ -14,7 +14,7 @@ export const AuthPage = (): JSX.Element => {
             <section className='max-w-md w-full p-6 bg-white rounded-lg shadow-md'>
                 <h2 className='text-2xl font-bold mb-4 text-center'>Welcome to Presentations</h2>
                 <p className='text-gray-600 mb-6 text-center'>Enter any nickname to access presentations</p>
-                <AuthByUsernameForm onComplete={() => router.push('/')} />
+                <AuthByUsernameForm onComplete={() => router.push('/dashboard/presentation/list')} />
             </section>
         </main>
     );
